@@ -1,0 +1,63 @@
+---
+- name: Create stork postgresql database
+  community.postgresql.postgresql_db:
+    name: "{{ stork_database }}"
+  become: true
+  become_user: "{{ postgresql_user }}"
+
+- name: Revoke PUBLIC permissions on stork postgresql database
+  community.postgresql.postgresql_privs:
+    database: "{{ stork_database }}"
+    role: PUBLIC
+    type: database
+    privs: ALL
+    state: absent
+  become: yes
+  become_user: "{{ postgresql_user }}"
+
+- name: Revoke PUBLIC permissions for public schema on stork postgresql database
+  community.postgresql.postgresql_privs:
+    database: "{{ stork_database }}"
+    role: PUBLIC
+    type: schema
+    objs: public
+    privs: ALL
+    state: absent
+  become: yes
+  become_user: "{{ postgresql_user }}"
+
+- name: Create stork postgresql user
+  community.postgresql.postgresql_user:
+    name: "{{ stork_database_user }}"
+    password: "{{ stork_database_password }}"
+    role_attr_flags: NOSUPERUSER,NOCREATEROLE,NOCREATEDB
+  no_log: true
+  become: true
+  become_user: "{{ postgresql_user }}"
+
+- name: Grant all to stork postgresql database for stork user
+  community.postgresql.postgresql_privs:
+    db: postgres
+    type: database
+    obj: "{{ stork_database }}"
+    role: "{{ stork_database_user }}"
+    privs: ALL
+  become: true
+  become_user: "{{ postgresql_user }}"
+
+- name: Grant all to public schema for stork postgresql user
+  community.postgresql.postgresql_privs:
+    db: "{{ stork_database }}"
+    role: "{{ stork_database_user }}"
+    type: schema
+    objs: public
+    privs: ALL
+  become: yes
+  become_user: "{{ postgresql_user }}"
+
+- name: Add pgcrypto extension to stork postgresql database
+  community.postgresql.postgresql_ext:
+    db: "{{ stork_database }}"
+    name: pgcrypto
+  become: yes
+  become_user: "{{ postgresql_user }}"

@@ -1,0 +1,107 @@
+---
+argument_specs:
+  main:
+    short_description: Install and configure Stork for Kea DHCP
+    options:
+      postgresql_user:
+        description: Name of the postgresql unix user
+        type: str
+        default: postgres
+
+      stork_apt_key_fingerprint:
+        description: Fingerprint for the stork apt key
+        type: str
+
+      stork_server_install:
+        description: If true, install and configure stork server
+        type: bool
+        default: true
+
+      stork_agent_install:
+        description: If true, install and configure stork agent
+        type: bool
+        default: true
+
+      stork_server_address:
+        description: Server listen address
+        type: str
+        default: localhost
+
+      stork_server_port:
+        description: Server listen port
+        type: int
+        default: 8001
+
+      stork_database:
+        description: Name for the stork postgresql database
+        type: str
+        default: stork
+
+      stork_database_user:
+        description: Name for the stork postgresql database user
+        type: str
+        default: stork
+
+      stork_database_password:
+        description: |
+          Password for the stork postgresql database user,
+          required when stork_server_install = true
+        type: str
+
+      stork_agent_host:
+        description: |
+          Agent listen address.
+          In most cases, this should be set to the hostname of the host
+          as the Common Name in the generated cert will be set to the value
+          of stork_agent_host, which is verified by the stork server.
+          By default, this is set to inventory_hostname.
+        type: str
+
+      stork_agent_port:
+        description: Agent listen port
+        type: int
+        default: 8002
+
+      stork_agent_server_url:
+        description: URL to stork server for the agent to register to
+        type: str
+        default: http://localhost:8001
+
+      stork_kea_exporter_address:
+        description: Kea exporter listen address
+        type: str
+        default: localhost
+
+      stork_kea_exporter_port:
+        description: Kea exporter listen port
+        type: int
+        default: 9547
+
+      stork_bind9_exporter_address:
+        description: Bind9 exporter listen address
+        type: str
+        default: localhost
+
+      stork_bind9_exporter_port:
+        description: Bind9 exporter listen port
+        type: int
+        default: 9119
+
+      stork_server_config:
+        description: |
+          Extra server configuration,
+          see https://stork.readthedocs.io/en/latest/install.html#setup
+        type: dict
+
+      stork_agent_config:
+        description: |
+          Extra agent configuration,
+          see https://stork.readthedocs.io/en/latest/install.html#agent-configuration-settings
+        type: dict
+
+      stork_agent_credentials:
+        description: |
+          Agent authentication credentials with a kea control agent,
+          see the basic auth example given here:
+          https://stork.readthedocs.io/en/latest/install.html#securing-connections-between-stork-agent-and-the-kea-control-agent
+        type: dict

@@ -1,0 +1,23 @@
+---
+postgresql_user: postgres
+
+stork_apt_key_fingerprint: 7AB5064B08F069A1A5CC500C77F64EC28053D1FB
+stork_server_install: true
+stork_agent_install: true
+
+stork_server_address: localhost
+stork_server_port: 8001
+stork_database: stork
+stork_database_user: stork
+
+stork_agent_host: "{{ inventory_hostname }}"
+stork_agent_port: 8002
+stork_agent_server_url: http://localhost:{{ stork_server_port }}
+stork_kea_exporter_address: localhost
+stork_kea_exporter_port: 9547
+stork_bind9_exporter_address: localhost
+stork_bind9_exporter_port: 9119
+
+stork_server_config: {}
+stork_agent_config: {}
+stork_agent_credentials: {}

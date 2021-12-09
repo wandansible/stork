@@ -1,0 +1,10 @@
+---
+- name: restart isc-stork-server
+  ansible.builtin.service:
+    name: isc-stork-server
+    state: restarted
+
+- name: restart isc-stork-agent
+  ansible.builtin.service:
+    name: isc-stork-agent
+    state: restarted

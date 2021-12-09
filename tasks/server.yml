@@ -1,0 +1,23 @@
+---
+- ansible.builtin.import_tasks: postgresql.yml
+
+- name: Install stork server
+  ansible.builtin.apt:
+    name: isc-stork-server
+    state: present
+
+- name: Configure stork server
+  ansible.builtin.template:
+    src: server.env
+    dest: /etc/stork/server.env
+    owner: stork-server
+    group: stork-server
+    mode: u=rw,g=,o=
+  no_log: true
+  notify: restart isc-stork-server
+
+- name: Start and enable stork server
+  ansible.builtin.service:
+    name: isc-stork-server
+    state: started
+    enabled: yes

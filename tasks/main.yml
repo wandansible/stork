@@ -1,0 +1,6 @@
+---
+- ansible.builtin.import_tasks: apt.yml
+- ansible.builtin.import_tasks: server.yml
+  when: stork_server_install | bool
+- ansible.builtin.import_tasks: agent.yml
+  when: stork_agent_install | bool

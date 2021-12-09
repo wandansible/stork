@@ -1,0 +1,42 @@
+---
+- name: Install stork agent
+  ansible.builtin.apt:
+    name: isc-stork-agent
+    state: present
+
+- name: Configure stork agent
+  ansible.builtin.template:
+    src: agent.env
+    dest: /etc/stork/agent.env
+    owner: root
+    group: root
+    mode: u=rw,g=r,o=r
+  notify: restart isc-stork-agent
+
+- name: Configure stork agent credentials
+  ansible.builtin.template:
+    src: agent-credentials.json
+    dest: /etc/stork/agent-credentials.json
+    owner: stork-agent
+    group: stork-agent
+    mode: u=rw,g=,o=
+  no_log: true
+  notify: restart isc-stork-agent
+
+- name: Check for kea control agent config file
+  ansible.builtin.stat:
+    path: /etc/kea/kea-ctrl-agent.conf
+  register: check_for_kea_ctrl_agent_config
+
+- name: Add stork-agent to kea group
+  ansible.builtin.user:
+    name: stork-agent
+    groups: _kea
+    append: true
+  when: check_for_kea_ctrl_agent_config.stat.exists
+
+- name: Start and enable stork agent
+  ansible.builtin.service:
+    name: isc-stork-agent
+    state: started
+    enabled: yes
