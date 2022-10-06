@@ -1,7 +1,7 @@
 ---
 argument_specs:
   main:
-    short_description: Install and configure Stork for Kea DHCP
+    short_description: Install and configure Stork for Kea DHCP server
     options:
       postgresql_user:
         description: Name of the postgresql unix user
