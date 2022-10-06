@@ -1,0 +1,9 @@
+---
+- name: Converge
+  hosts: all
+  tasks:
+    - name: "Include wandansible.stork"
+      ansible.builtin.include_role:
+        name: "wandansible.stork"
+      vars:
+        stork_database_password: "password"
